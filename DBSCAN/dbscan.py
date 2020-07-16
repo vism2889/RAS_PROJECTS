@@ -32,16 +32,17 @@ class DB(object):
     def makeCluster(self, minx, miny, minz, maxx, maxy, maxz):
         # generates coordinates for points in clusters
 
-        '''
+        # noisey data points
         for i in range(self.clusters):
             for j in range(self.pointsPer):
-                x = random.randint(minx*(i+1),maxx*(i+1))
+                x = random.randint(minx*(i+1),maxx*(i+7))
                 y = random.randint(minx*(i+1),maxx*(i+1))
-                z = random.randint(minx*(i+1)+5*i,maxx*(i+1))
+                z = random.randint(minx*(i+1)+7*i,maxx*(i+1))
                 point = Point(x,y,z)
                 self.allPoints.append(point)
-        '''
 
+        '''
+        # clean data points in shape of cubes
         for m in range(10):
             for i in range(maxx-2):
                 for j in range(maxy-2):
@@ -51,7 +52,7 @@ class DB(object):
                         z = k
                         point = Point(x+m*10,y+m*10,z+m*10)
                         self.allPoints.append(point)
-
+        '''
 
 def distFunc(point1, point2):
     dist = (((point2.x-point1.x)**2)+((point2.y-point1.y)**2)+((point2.z-point1.z)**2))**0.5
