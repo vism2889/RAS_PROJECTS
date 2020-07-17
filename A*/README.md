@@ -5,7 +5,7 @@
 
 
 # With organized data points
-![A* COMPLETE](https://github.com/vism2889/RAS_PROJECTS/blob/master/images/a_star_example1.mp4?raw=true)
+![A* COMPLETE](https://github.com/vism2889/RAS_PROJECTS/blob/master/images/a_star_example1.gif?raw=true)
 
 # With noisy data points
-![A* NO SOLUTION](https://github.com/vism2889/RAS_PROJECTS/blob/master/images/a_star_example2.mp4?raw=true)
+![A* NO SOLUTION](https://github.com/vism2889/RAS_PROJECTS/blob/master/images/a_star_example2.gif?raw=true)
