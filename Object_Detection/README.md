@@ -4,7 +4,16 @@
 
 ### The detector was trained using transfer learning and the 'faster_rcnn_inception_v2_coco_2018_01_28' model that was indicated in the tutorial.
 
-### the included files are: 'indycar_frozen_inference_graph.pb' and 'indycar_labelmap.pbtxt' whose file extensions can be plugged into the code from [here](https://gilberttanner.com/blog/creating-your-own-objectdetector) to run the indy car detector.
+### The included files are: 'indycar_frozen_inference_graph.pb' and 'indycar_labelmap.pbtxt' whose file extensions can be plugged into the code from [here](https://gilberttanner.com/blog/creating-your-own-objectdetector) to run the indy car detector.
+
+
+# Detector in action:
+<p float = "left">
+  <img src="https://github.com/vism2889/RAS_PROJECTS/blob/master/images/indycar_detector1.png" width="200" />
+  <img src="https://github.com/vism2889/RAS_PROJECTS/blob/master/images/indycar_detector2.png" width="200" />
+  <img src="https://github.com/vism2889/RAS_PROJECTS/blob/master/images/indycar_detector3.png" width="200" />
+  <img src="https://github.com/vism2889/RAS_PROJECTS/blob/master/images/indycar_detector4.png" width="200" />
+</p>
 
 
 # TODO:
