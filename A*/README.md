@@ -1,6 +1,6 @@
 # A* Planner
 
-### This version of A* was modeled after Daniel Shiffman's P5.js tutorial, it uses python3 and pygame.
+### This version of A* was modeled after [Daniel Shiffman's P5.js implementation](https://www.youtube.com/watch?v=aKYlikFAV4k), it uses python3 and pygame.
 
 
 
