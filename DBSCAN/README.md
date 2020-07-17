@@ -1,7 +1,7 @@
 # DBSCAN
 ## (Density-based Spatial Clustering of Applications with Noise)
 
-### This version of DBSCAN was taken from [this](https://medium.com/nearist-ai/dbscan-clustering-tutorial-dd6a9b637a4b) tutorial and modified to use a distance function that works with 3D points.  It uses matplotlib to visualize the resulting data.  Clusters are denoted by different colors, and noise is denoted with small black points.
+### This version of DBSCAN was taken from [Chris McCormick's tutorial](https://medium.com/nearist-ai/dbscan-clustering-tutorial-dd6a9b637a4b) and modified to use a distance function that works with 3D points.  It uses matplotlib to visualize the resulting data.  Clusters are denoted by different colors, and noise is denoted with small black points.
 
 
 # With organized data points
