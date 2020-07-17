@@ -5,5 +5,7 @@
 
 
 # Examples
-<img src="https://github.com/vism2889/RAS_PROJECTS/blob/master/images/a_star_example_1.gif" width="300" />
-<img src="https://github.com/vism2889/RAS_PROJECTS/blob/master/images/a_star_example_2.gif" width="300" />
+<p float = "left">
+  <img src="https://github.com/vism2889/RAS_PROJECTS/blob/master/images/a_star_example_1.gif" width="300" />
+  <img src="https://github.com/vism2889/RAS_PROJECTS/blob/master/images/a_star_example_2.gif" width="300" />
+</p>
