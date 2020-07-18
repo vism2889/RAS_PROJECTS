@@ -25,12 +25,12 @@ public:
 float distFunc(Point a, Point b);
 std::vector<Point> regionQuery(std::vector<Point> database, int p, float epsilon);
 void growCluster(std::vector<Point> database, std::vector<int> labels, int p, int c, float epsilon, int MinPts);
-
+std::vector<int> myDbscan(std::vector<Point> database, float epsilon, int minPts);
 
 int main()
 {
   std::vector<Point> database;
-  for (int i = 0; i < 5; i++)
+  for (int i = 0; i < 10; i++)
   {
     Point p;
     p.x = i;
@@ -52,6 +52,16 @@ int main()
   cout << "distance function: ";
   cout << "hey " << distFunc(database[2], database[3]);
   cout << endl;
+
+
+  std::vector<int> clusterLabelList = myDbscan(database,1.9,2);
+
+  for (int i = 0; i < clusterLabelList.size(); i++)
+  {
+    cout << clusterLabelList[i] << " ";
+  }
+
+
   return 0;
 }
 
@@ -68,7 +78,7 @@ std::vector<Point> regionQuery(std::vector<Point> database, int p, float epsilon
 {
 
   std::vector<Point> neighbors;
-  for (int i = 0; i <= database.size(); i++)
+  for (int i = 0; i < database.size(); i++)
   {
     if (distFunc(database[p],database[i]) < epsilon)
     {
@@ -89,6 +99,53 @@ void growCluster(std::vector<Point> database, std::vector<int> labels, int p, in
     if (neighborPts.size() < minPts)
     {
       i = i + 1;
+      continue;
+    }
+    for (int i = 0; i < neighborPts.size(); i++)
+    {
+      if (labels[i] == -1)
+      {
+        labels[i] = c;
+      }
+      else if (labels[i] == 0)
+      {
+        labels[i] = c;
+        searchQueue.push_back(i);
+      }
+    }
+    i = i + 1;
+  }
+}
+
+std::vector<int> myDbscan(std::vector<Point> database, float epsilon, int minPts)
+{
+  int d = database.size();
+  std::vector<int> labels;
+  for (int i = 0; i < database.size(); i++)
+  {
+    labels.at(i) = 0;
+  }
+  int c = 0;
+
+
+
+  for (int i = 0; i < database.size(); i++)
+  {
+    if (labels[i] != 0)
+    {
+      continue;
+    }
+    std::vector<Point> neighborPts = regionQuery(database, i, epsilon);
+    if (neighborPts.size() < minPts)
+    {
+      labels[i] = -1;
+    }
+    else
+    {
+      c = c + 1;
+      labels[i] = c;
+      growCluster(database, labels, i, c, epsilon, minPts);
     }
   }
+  return labels;
 }
