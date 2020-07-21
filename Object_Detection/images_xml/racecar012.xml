@@ -1,0 +1,26 @@
+<annotation>
+	<folder>racecars</folder>
+	<filename>racecar012.jpg</filename>
+	<path>/home/ros/Downloads/racecars/racecar012.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>800</width>
+		<height>600</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>racecar</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>22</xmin>
+			<ymin>18</ymin>
+			<xmax>792</xmax>
+			<ymax>509</ymax>
+		</bndbox>
+	</object>
+</annotation>
