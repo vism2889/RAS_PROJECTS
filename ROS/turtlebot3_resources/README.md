@@ -1,6 +1,7 @@
 # Turtlebot3 with Ubuntu 18.04 and ROS Melodic
 
 ### These instructions assume you already on a system running Ubuntu 18.04 have ROS Melodic installed.
+### I ran into issues with versioning of protoc, I would recommend using protoc-3.0.0 (add more info)
 
 ##### You will need to go into the catkin workspace you want to build turtlebot3 in.
 `cd ~/turtlebot3_catkin_ws/src`

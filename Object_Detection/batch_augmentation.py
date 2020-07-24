@@ -9,17 +9,24 @@
 # - Uses python3 and imgaug library.
 # - Assumes given directory is full of image files with names that match corresponding XML
 #   files names. EX: 'racecar004.jpg' & 'racecar004.xml'
+# - Assumes only one label is being used in our case 'racecar'
 #
+
+# TODO:
+# - scales and crops / change backgrounds augmenters
+# - look at distance between cars and makes sure training and test set have similar images
 ###############################################################################
 
 import os
 import math
 import imageio
 from imgaug import augmenters as iaa
+#from imgaug import
 from matplotlib import pyplot as plt
 import numpy as np
 from imgaug.augmentables.bbs import BoundingBox, BoundingBoxesOnImage
 import xml.etree.ElementTree as ET
+from PIL import Image
 
 def getBoundingBox(filename):
     # parses XML file for bounding box coordinates for single object and box
@@ -59,7 +66,7 @@ def getAllFiles(directoryPATH,filename):
     folderSize = len(files)
     fileNames = []
     for i in range(folderSize//2):
-        numLabel = "{:0>3d}".format(i+1)
+        numLabel = "{:0>5d}".format(i+1)
         currFile = filename + numLabel
         fileNames.append(currFile)
     return fileNames
@@ -93,6 +100,16 @@ def imageFileEXT(directoryPATH, filename):
     correctFile = ''
     files = os.listdir(directoryPATH)
     for file in files:
+        if file.endswith('.jpg'):
+            '''
+            try:
+                img = Image.open(base_dir+"\\"+filename) # open the image file
+                img.verify() # verify that it is, in fact an image
+            except (IOError, SyntaxError) as e:
+                print('Bad file:', filename)
+                continue
+                #os.remove(base_dir+"\\"+filename) (Maybe)
+            '''
         if (file == filename + jpg) or (file == filename + jpeg) or (file == filename + png):
             correctFile = file
             break
@@ -171,40 +188,29 @@ def performAugment(imageFilename,boundingBox):
 
     return [image_aug, bbs_aug]
 
-def indyAugmenter(filename, direcotryPATH):
-    filenames = getAllFiles()
-    for file in filenames:
-        imageFile = imageFileEXT(directoryPATH, file)
-        xmlFile = xmlFileEXT(file)
-        boundingBox = getBoundingBox(xmlFile)
-        (image_aug, bbs_aug) = performAugment(imageFile, boundingBox)
-        # save image
-        # save xml file with new coordinates
 
-
-    return 42
 
 def updateXML(filename, root, tree, newFilename, augboxes):
     allBoxCoords = augboxes#getAllBoundingBoxes(filename,root)
     xmin = 0
     for object in root.iter('xmin'):
-            print(object.tag, object.attrib)
+            #print(object.tag, object.attrib)
             object.text = str(math.floor(allBoxCoords[xmin][0]))
             xmin += 1
     ymin = 0
     for object in root.iter('ymin'):
-            print(object.tag, object.attrib)
+            #print(object.tag, object.attrib)
             object.text = str(math.floor(allBoxCoords[ymin][1]))
             ymin += 1
 
     xmax = 0
     for object in root.iter('xmax'):
-            print(object.tag, object.attrib)
+            #print(object.tag, object.attrib)
             object.text = str(math.floor(allBoxCoords[xmax][2]))
             xmax += 1
     ymax = 0
     for object in root.iter('ymax'):
-            print(object.tag, object.attrib)
+            #print(object.tag, object.attrib)
             object.text = str(math.floor(allBoxCoords[ymax][3]))
             ymax += 1
 
@@ -217,8 +223,8 @@ def updateXML(filename, root, tree, newFilename, augboxes):
 
 
 def main():
-    PATH = '/Users/morganvisnesky/RAS_PROJECTS/Object_Detection/images_xml'
-    newPATH = '/Users/morganvisnesky/RAS_PROJECTS/Object_Detection/images_xml_AUG'
+    PATH = '/Users/morganvisnesky/RAS_PROJECTS/images/both'
+    newPATH = '/Users/morganvisnesky/RAS_PROJECTS/Object_Detection/images_xml_AUG_9'
     try:
         os.mkdir(newPATH)
     except OSError:
@@ -231,8 +237,10 @@ def main():
     jpeg = '.jpeg'
     png = '.png'
     all = getAllFiles(PATH,'racecar')
-    print(all)
+    #print(all)
+    imageCount = 1
     for i in range(len(all)):
+        print('Creating Image + XML: ' + str(imageCount))
         filename = all[i]
         tree = ET.parse(PATH + '/' +filename+xml)
         root = tree.getroot()
@@ -241,7 +249,7 @@ def main():
         allboxes = getAllBoundingBoxes(PATH + '/' +filename + xml,root)
         allbbs = []
         for box in allboxes:
-            print(box)
+            #print(box)
             box_x1 = box[0]
             box_y1 = box[1]
             box_x2 = box[2]
@@ -252,32 +260,51 @@ def main():
             allbbs.append(newBox)
 
         bbs = BoundingBoxesOnImage(allbbs, shape=image.shape)
-        print(bbs)
+        #print(bbs)
+        seq2 = iaa.Sequential([
+            # can only be applied to images not bounding boxes
+            # does not change position of pixels much so can use bounds from original image
+            iaa.imgcorruptlike.ZoomBlur(severity=2),
+            iaa.imgcorruptlike.Brightness(severity=2),
+            iaa.imgcorruptlike.ElasticTransform(severity=2)
+        ])
 
+        # replace seq with random augmentation function
         seq = iaa.Sequential([
-            iaa.GammaContrast(1.5), # add contrast
+            iaa.GammaContrast(1.00), # add contrast 0.5 and 2.0
 
             # motion blur, use between 25 and 155 for k to get results accurate to fast indy-car
-            iaa.MotionBlur(k=155, angle=[-45, 45]),
+            #iaa.MotionBlur(k=25, angle=[-45, 255]),
+            iaa.ElasticTransformation(alpha=(10.0), sigma=0.5),
+            iaa.PiecewiseAffine(scale=(0.01, 0.025)),
+            iaa.AveragePooling(((1, 7), (1, 7))),
 
-            #iaa.GaussianBlur(sigma=0.0), # gaussian blur
-            iaa.MeanShiftBlur(), # meanshift blur
-            iaa.Affine(translate_percent={"x": 0.1}, scale=0.8), # translate the image
-            iaa.Affine(translate_percent={"y": 0.2}, scale=1.2),
-            iaa.Fliplr(p = 0.8) # apply horizontal flip
+
+            # TODO: scales and crops / change backgrounds augmenters
+            # look at distance between cars and makes sure training and test set have similar images
+
+            #iaa.GaussianBlur(sigma=2.0), # gaussian blur
+            #iaa.MeanShiftBlur(), # meanshift blur
+            #iaa.Affine(translate_percent={"x": 0.1}, scale=0.8), # translate the image
+            #iaa.Affine(translate_percent={"y": 0.2}, scale=0.9),
+            iaa.Fliplr(p = 0.0) # apply horizontal flip
         ])
 
         # apply augmentations
         image_aug, bbs_aug = seq(image=image, bounding_boxes=bbs)
+        #image_aug2 = seq2(image=image_aug)
 
         # update new xml file
         aug_boxes = []
         for i in range(len(bbs_aug.bounding_boxes)):
             aug_boxes.append(getAugBoundingBoxes(bbs_aug.bounding_boxes[i]))
-            print(getAugBoundingBoxes(bbs_aug.bounding_boxes[i]))
-        print(aug_boxes)
-        updateXML(PATH + '/' + filename+xml, root,tree,newPATH + '/'+filename+'_AUG_1'+xml,aug_boxes)
-        generateNewImage(newPATH + '/'+filename+'_AUG_1'+png,image_aug)
+            #print(getAugBoundingBoxes(bbs_aug.bounding_boxes[i]))
+        #print(aug_boxes)
+        updateXML(PATH + '/' + filename+xml, root,tree,newPATH + '/'+filename+'_AUG_9'+xml,aug_boxes)
+        generateNewImage(newPATH + '/'+filename+'_AUG_9'+png,image_aug)
+        print('Image + XML: ' + str(imageCount) + ' DONE')
+        imageCount += 1
+    print('** DONE WITH AUGMENTATION SEQUENCE **')
 
 
 main()
