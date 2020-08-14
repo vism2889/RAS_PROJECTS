@@ -32,7 +32,7 @@ def getAllBoundingBoxes(filename,root):
             for i in range(4):
                 #print(child[4][i].text)
                 newCoords.append(int(child[4][i].text))
-            #print(newCoords)
+            print(newCoords)
             allBoxCoords.append(newCoords)
     return allBoxCoords
 
@@ -46,7 +46,7 @@ def getAugBoundingBoxes(augmentedBoundingBox):
     return (x1,y1,x2,y2)
 
 def main():
-    filename = '/Users/morganvisnesky/RAS_PROJECTS/images/images_xml_test/racecar003'
+    filename = '/home/morgan/Documents/INDY_DETECTOR_IMAGES/dataset_500_originals/racecar00018'
     xml = '.xml'
     jpg = '.jpg'
     jpeg = '.jpeg'
@@ -74,13 +74,16 @@ def main():
     # augmentation sequence
     #
     seq = iaa.Sequential([
-        iaa.GammaContrast(1.5), # add contrast
-        iaa.MotionBlur(k=25, angle=[-45, 45]), # motion blur
-        #iaa.GaussianBlur(sigma=0.0), # gaussian blur
-        #iaa.MeanShiftBlur(), # meanshift blur
-        #iaa.Affine(translate_percent={"x": 0.1}, scale=0.8), # translate the image
-        #iaa.Affine(translate_percent={"y": 0.2}, scale=1.2),
-        iaa.Fliplr(p = 1.0) # apply horizontal flip
+        iaa.GammaContrast(0.5) # add contrast
+        #iaa.MotionBlur(k=125, angle=[-275, 245]), # motion blur
+        #iaa.GaussianBlur(sigma=0.0) # gaussian blur
+        #iaa.MeanShiftBlur() # meanshift blur
+        #iaa.Affine(translate_percent={"x": 0.1}, scale=0.7), # translate the image
+        #iaa.Affine(translate_percent={"y": 0.0}, scale=0.8),
+        #iaa.Fliplr(p = 1.0) # apply horizontal flip
+        #iaa.ElasticTransformation(alpha=(7.0), sigma=0.5),
+        #iaa.PiecewiseAffine(scale=(0.2, 0.125))
+        #iaa.AveragePooling(((1, 7), (1, 7)))
     ])
 
     # apply augmentations
