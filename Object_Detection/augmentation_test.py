@@ -46,7 +46,7 @@ def getAugBoundingBoxes(augmentedBoundingBox):
     return (x1,y1,x2,y2)
 
 def main():
-    filename = '/home/morgan/Documents/INDY_DETECTOR_IMAGES/dataset_500_originals/racecar00018'
+    filename = '/home/morgan/Documents/FROMTHINKPAD_IMAGES/both_images_and_xml/racecar00034'
     xml = '.xml'
     jpg = '.jpg'
     jpeg = '.jpeg'
@@ -74,20 +74,31 @@ def main():
     # augmentation sequence
     #
     seq = iaa.Sequential([
-        iaa.GammaContrast(0.5) # add contrast
-        #iaa.MotionBlur(k=125, angle=[-275, 245]), # motion blur
+        #iaa.GammaContrast(0.25) # add contrast
+        #iaa.MotionBlur(k=50, angle=[-45, 135]), # motion blur
         #iaa.GaussianBlur(sigma=0.0) # gaussian blur
         #iaa.MeanShiftBlur() # meanshift blur
         #iaa.Affine(translate_percent={"x": 0.1}, scale=0.7), # translate the image
         #iaa.Affine(translate_percent={"y": 0.0}, scale=0.8),
-        #iaa.Fliplr(p = 1.0) # apply horizontal flip
+        #iaa.Fliplr(p = 1.0), # apply horizontal flip
         #iaa.ElasticTransformation(alpha=(7.0), sigma=0.5),
         #iaa.PiecewiseAffine(scale=(0.2, 0.125))
         #iaa.AveragePooling(((1, 7), (1, 7)))
     ])
 
+    seq2 = iaa.Sequential([
+            # can only be applied to images not bounding boxes
+            # does not change position of pixels much so can use bounds from original image
+            iaa.imgcorruptlike.ZoomBlur(severity=2),
+            iaa.imgcorruptlike.Brightness(severity=2),
+            iaa.imgcorruptlike.ElasticTransform(severity=2)
+        ])
+
     # apply augmentations
     image_aug, bbs_aug = seq(image=image, bounding_boxes=bbs)
+
+    # apply augmentations
+    image_aug = seq2(image=image)
 
     # creates new augmented bounding boxes
     aug_boxes = []
@@ -97,7 +108,7 @@ def main():
     # add bounding boxes to images
     side_by_side = np.hstack([
         bbs.draw_on_image(image, size=2), # blend the original image with bounding box
-        bbs_aug.draw_on_image(image_aug, size=2) # blend the augmented image with bounding box
+        bbs.draw_on_image(image_aug, size=2) # blend the augmented image with bounding box
     ])
 
     # Plot with matplotlib imshow()
