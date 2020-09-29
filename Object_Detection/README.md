@@ -1,5 +1,6 @@
 # See `frozen_models` for Indy Car Detector
 
+<img src="https://github.com/vism2889/RAS_PROJECTS/blob/master/images/indy_race_detector.gif" width="600">
 
 # Indy Augmentation Script
 ### The `batch_augmentation.py` script was written using python3 and the imgaug library to generate training data by augmenting existing images with corresponding XML files with labels and bounding boxes.  The script takes a directory and performs a selection of random augmentation functions with arguments that have been chosen to simulate realistic motionBlur, camera perspective, lighting, and weather conditions that an indy car might experience while racing.
