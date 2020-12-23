@@ -1,0 +1,44 @@
+Camera Placement Specifications:
+NOTE:(x and y is relative to origin of vehicle model)
+
+Front Facing (1){
+x = 2307.6285 mm
+y = -120.0000 mm
+z = 724.5878 mm
+heading = 0.0000 deg
+}
+
+Front Facing (2){
+x = 2307.6285 mm
+y = 120.0000 mm
+z = 724.5878 mm
+heading = 0.0000 deg
+}
+
+Right Side Facing{
+x = 2230.2578 mm
+y = -219.1250 mm
+z = 724.5878 mm
+heading = -55.0000 deg
+}
+
+Left Side Facing{
+x = 2230.2578 mm
+y = 219.1250 mm
+z = 724.5878 mm
+heading = 55.0000 deg
+}
+
+Rear Right Facing{
+x = 1404.1194 mm
+y = -185.1456 mm
+z = 795.7968 mm
+heading = -130.0000 deg
+}
+
+Rear Left Facing{
+x = 1404.1194 mm
+y = 185.1456 mm
+z = 795.7968 mm
+heading = 130.0000 deg
+}

@@ -11,3 +11,4 @@ A simulator created in the unity game engine to gather artificial training data 
 - Create waypoint spline.
 - Script to output camera feed to mp4 files.
 - Create or buy better race-car asset that resembles our use case better.
+- Adjust camera placement to cam_placement_specifications.txt.
