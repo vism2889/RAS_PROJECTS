@@ -1,4 +1,4 @@
-# Indy Car Detector
+# Indy Car Detectors Using Tensorflow.
 
 ### I trained a handful of different detectors using Gilbert Tanner's tutorial [here](https://gilberttanner.com/blog/installing-the-tensorflow-object-detection-api) to setup tensorflow's object detection api, and his tutorial [here](https://gilberttanner.com/blog/creating-your-own-objectdetector) to train the detectors.
 
