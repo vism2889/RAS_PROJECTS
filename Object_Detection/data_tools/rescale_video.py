@@ -16,17 +16,18 @@ import argparse
 from tqdm import tqdm
 
 # Path to video to rescale
-path_to_video = '/home/ubuntu/Videos_data/ChristianBrooksPassing.mp4'
+path_to_video = '/home/ubuntu/data/originals/sebastian_vettel.mp4'
 
 # Path to directory to output frames and video (this folder will be created)
-output_from_video_dir = '/home/ubuntu/video_to_image_exports/'
+output_from_video_dir = '/home/ubuntu/data/frames_output/sebastian_vettel'
 
 if os.path.exists(output_from_video_dir):
     shutil.rmtree(output_from_video_dir)
 
 os.mkdir(output_from_video_dir)
+os.chdir(output_from_video_dir)
 
-# ------------ convert to video -------------
+# ------------ convert to frames -------------
 vidcap = cv2.VideoCapture(path_to_video)
 
 images = []
@@ -36,14 +37,19 @@ def getFrame(sec, count):
     hasFrames,image = vidcap.read()
 
     if hasFrames:
-        images.append(output_from_video_dir+str(count)+".jpg")
+        images.append(str(count)+".jpg")
         cv2.imwrite(images[-1], image)
 
 sec = 0
 frameRate = vidcap.get(cv2.CAP_PROP_FPS)
 
+if vidcap.get(cv2.CAP_PROP_FRAME_COUNT) > 2000:
+    frame_num = 2000
+else:
+    frame_num = int(vidcap.get(cv2.CAP_PROP_FRAME_COUNT))
+
 print("Converting to Frames")
-for i in tqdm(range(int(vidcap.get(cv2.CAP_PROP_FRAME_COUNT)))):
+for i in tqdm(range(frame_num)):
     sec = sec + 1.0/frameRate
     sec = round(sec, 2)
     getFrame(sec, i)
@@ -52,15 +58,15 @@ for i in tqdm(range(int(vidcap.get(cv2.CAP_PROP_FRAME_COUNT)))):
 def rescale_images(directory, size):
     print("Rescaling Images")
     for img in tqdm(os.listdir(directory)):
-        im = Image.open(directory+img)
+        im = Image.open(img)
         im_resized = im.resize(size, Image.ANTIALIAS)
-        im_resized.save(directory+img)
+        im_resized.save(img)
 
 rescale_images(output_from_video_dir, (800,600))
 
 # --------- convert back to video -------------
 image_folder = output_from_video_dir
-video_name = output_from_video_dir + 'rescaled_video.avi'
+video_name = output_from_video_dir + '_rescaled.avi'
 
 frame = cv2.imread(os.path.join(image_folder, images[0]))
 height, width, layers = frame.shape
